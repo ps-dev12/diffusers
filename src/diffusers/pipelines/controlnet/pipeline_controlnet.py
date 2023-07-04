@@ -846,6 +846,7 @@ class StableDiffusionControlNetPipeline(DiffusionPipeline, TextualInversionLoade
             negative_prompt_embeds=negative_prompt_embeds,
             lora_scale=text_encoder_lora_scale,
         )
+        print("Control-Net-Pipeline-prompt-embeds",prompt_embeds.shape)
 
         # 4. Prepare image
         if isinstance(controlnet, ControlNetModel):
@@ -900,6 +901,7 @@ class StableDiffusionControlNetPipeline(DiffusionPipeline, TextualInversionLoade
             generator,
             latents,
         )
+        print("LatentsControlnet-Pipeline",latents.shape)
 
         # 7. Prepare extra step kwargs. TODO: Logic should ideally just be moved out of the pipeline
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
@@ -910,6 +912,7 @@ class StableDiffusionControlNetPipeline(DiffusionPipeline, TextualInversionLoade
             for i, t in enumerate(timesteps):
                 # expand the latents if we are doing classifier free guidance
                 latent_model_input = torch.cat([latents] * 2) if do_classifier_free_guidance else latents
+                print("latent_model_input_Controlnet-Pipeline",latent_model_input.shape)
                 latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
 
                 # controlnet(s) inference
@@ -921,6 +924,8 @@ class StableDiffusionControlNetPipeline(DiffusionPipeline, TextualInversionLoade
                 else:
                     control_model_input = latent_model_input
                     controlnet_prompt_embeds = prompt_embeds
+                print("control_model_input_Controlnet-Pipeline",control_model_input.shape)
+                print("controlnet_prompt_embeds_Controlnet-Pipeline",controlnet_prompt_embeds.shape)
 
                 down_block_res_samples, mid_block_res_sample = self.controlnet(
                     control_model_input,
