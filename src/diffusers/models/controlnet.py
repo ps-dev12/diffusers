@@ -518,7 +518,7 @@ class ControlNetModel(ModelMixin, ConfigMixin):
         controlnet_cond = self.controlnet_cond_embedding(controlnet_cond)
 
         sample = sample + controlnet_cond
-
+        print("Inside Control-Net hidden state shape,encoder_hidden_states.shape)
         # 3. down
         down_block_res_samples = (sample,)
         for downsample_block in self.down_blocks:
