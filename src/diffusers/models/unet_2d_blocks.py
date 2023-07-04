@@ -920,6 +920,9 @@ class CrossAttnDownBlock2D(nn.Module):
                     **ckpt_kwargs,
                 )[0]
             else:
+                print("Inside CA down block encoder_hidden_states",encoder_hidden_states.shape)
+                print("Inside CA down block temb",temb.shape)
+                print("Inside CA down block hidden_states",hidden_states.shape)
                 hidden_states = resnet(hidden_states, temb)
                 hidden_states = attn(
                     hidden_states,
